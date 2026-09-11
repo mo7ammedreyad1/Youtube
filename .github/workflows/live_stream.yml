@@ -1,0 +1,24 @@
+name: YouTube Live Streamer
+
+on:
+  workflow_dispatch: # يتيح لك تشغيل البث يدوياً بضغطة زر متى أردت
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Video File
+        run: |
+          echo "جاري تحميل فيديو البث..."
+          curl -L "https://github.com/mo7ammedreyad1/Islam-agent/releases/download/quran-baqarah-v1/quran_baqarah_rub1_live_broadcast.mp4" -o stream_video.mp4
+          ls -lh stream_video.mp4
+
+      - name: Start Streaming to YouTube
+        env:
+          STREAM_KEY: ${{ secrets.YOUTUBE_STREAM_KEY }}
+        run: |
+          echo "بدء إرسال البث المباشر إلى يوتيوب..."
+          # الأمر -stream_loop 1 يعني تشغيل الفيديو مرة أساسية + تكراره مرة واحدة (إجمالي مرتين) ثم الإنهاء
+          ffmpeg -re -stream_loop 1 -i stream_video.mp4 -c copy -f flv "rtmp://a.rtmp.youtube.com/live2/$STREAM_KEY"
+          echo "تم الانتهاء من البث بنجاح بعد عرضه مرتين."
