@@ -1,4 +1,4 @@
-name: New Instagram Live Streamer
+name: Live Streamer - Surah Al-Baqarah (1-20)
 
 on:
   workflow_dispatch: # تشغيل البث يدوياً بضغطة زر
@@ -15,21 +15,18 @@ jobs:
           sudo apt install -y ffmpeg
           ffmpeg -version
 
-      - name: Download New Video File
+      - name: Download Video File
         run: |
-          echo "جاري تحميل فيديو البث الجديد..."
-          # ضع رابط الفيديو الجديد بين العلامتين بدلاً من الرابط الحالي إذا أردت تغيير الفيديو
-          curl -L "https://github.com/mo7ammedreyad1/Islam-agent/releases/download/fatihah-complete-v1/quran_fatihah_live_broadcast.mp4" -o stream_video.mp4
+          echo "جاري تحميل فيديو سورة البقرة (1-20)..."
+          curl -L "https://github.com/mo7ammedreyad1/Islam-agent/releases/download/surah-baqarah-1-20-live/quran_baqarah_1_to_20_live.mp4" -o stream_video.mp4
           ls -lh stream_video.mp4
 
       - name: Start Streaming to Instagram
         env:
-          STREAM_KEY: ${{ secrets.INSTAGRAM_STREAM_KEY }}
+          STREAM_KEY: ${{ secrets.INSTAGRAM_STREAM_KEY1 }}
         run: |
-          echo "بدء إرسال البث المباشر (مرة واحدة فقط بدون تكرار)..."
-          # تم إلغاء -stream_loop لضمان إنهاء وقفل البث فور انتهاء الفيديو
+          echo "بدء إرسال البث المباشر (يعرض مرة واحدة وينتهي تلقائياً)..."
           ffmpeg -re -i stream_video.mp4 \
             -c:v copy -c:a copy \
             -f flv "rtmps://edgetee-upload-hbe1-2.xx.fbcdn.net:443/rtmp/$STREAM_KEY"
-          
-          echo "تم الانتهاء من الفيديو وقفل البث المباشر تلقائياً."
+          echo "تم الانتهاء من البث بنجاح وقفل الرابط."
