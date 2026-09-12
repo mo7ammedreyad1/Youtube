@@ -1,4 +1,4 @@
-name: Live Streamer - Surah Al-Fatihah
+name: Live 
 
 on:
   workflow_dispatch: # تشغيل البث يدوياً بضغطة زر
