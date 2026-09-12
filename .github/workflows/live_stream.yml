@@ -1,7 +1,7 @@
-name: Restream Live Streamer
+name: Live Streamer - Surah Al-Baqarah (1٤-20)
 
 on:
-  workflow_dispatch: # يتيح لك تشغيل البث يدوياً بضغطة زر
+  workflow_dispatch: # تشغيل البث يدوياً بضغطة زر
 
 jobs:
   stream:
@@ -17,16 +17,14 @@ jobs:
 
       - name: Download Video File
         run: |
-          echo "جاري تحميل فيديو البث..."
-          curl -L "https://github.com/mo7ammedreyad1/Islam-agent/releases/download/fatihah-complete-v1/quran_fatihah_live_broadcast.mp4" -o stream_video.mp4
+          echo "جاري تحميل فيديو سورة البقرة (1-20)..."
+          curl -L "https://github.com/mo7ammedreyad1/Islam-agent/releases/download/surah-baqarah-1-20-live/quran_baqarah_1_to_20_live.mp4" -o stream_video.mp4
           ls -lh stream_video.mp4
 
-      - name: Start Streaming to Restream
-        env:
-          STREAM_URL: ${{ secrets.RESTREAM_STREAM_URL }}
+      - name: Start Streaming to Instagram
         run: |
-          echo "بدء إرسال البث المباشر..."
+          echo "بدء إرسال البث المباشر إلى إنستغرام..."
           ffmpeg -re -i stream_video.mp4 \
             -c:v copy -c:a copy \
-            -f flv "${STREAM_URL:-rtmp://live.restream.io/live/re_12341039_event7e655b23c7d24ef0b506f78afc1d63a4}"
+            -f flv "rtmps://edgetee-upload-hbe1-2.xx.fbcdn.net:443/rtmp/18103005710058579?s_bl=1&s_fbp=pmo1-1&s_ow=10&s_prp=hbe1-2&s_sw=0&s_tids=1&s_vt=ig&a=Ab7lUYqsInDW4ttgCTXu1Cze"
           echo "تم الانتهاء من البث بنجاح."
