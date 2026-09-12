@@ -1,0 +1,30 @@
+name: Live Streamer - Surah Al-Fatihah
+
+on:
+  workflow_dispatch: # تشغيل البث يدوياً بضغطة زر
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install FFmpeg
+        run: |
+          echo "جاري تثبيت FFmpeg..."
+          sudo apt update
+          sudo apt install -y ffmpeg
+          ffmpeg -version
+
+      - name: Download Video File
+        run: |
+          echo "جاري تحميل فيديو سورة الفاتحة..."
+          curl -L "https://github.com/mo7ammedreyad1/Islam-agent/releases/download/fatihah-complete-v1/quran_fatihah_live_broadcast.mp4" -o stream_video.mp4
+          ls -lh stream_video.mp4
+
+      - name: Start Streaming to Instagram
+        run: |
+          echo "بدء إرسال البث المباشر لسورة الفاتحة..."
+          ffmpeg -re -i stream_video.mp4 \
+            -c:v copy -c:a copy \
+            -f flv "rtmps://edgetee-upload-hbe1-2.xx.fbcdn.net:443/rtmp/17888111628682051?s_bl=1&s_fbp=pmo1-1&s_ow=10&s_prp=hbe1-2&s_sw=0&s_tids=1&s_vt=ig&a=Ab5n4sdCzmjKHFYRp1kT_7rM"
+          echo "تم الانتهاء من البث بنجاح."
