@@ -1,0 +1,37 @@
+name: Instagram Live Streamer
+
+on:
+  workflow_dispatch: # يتيح لك تشغيل البث يدوياً بضغطة زر
+
+jobs:
+  stream:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install FFmpeg
+        run: |
+          echo "جاري تثبيت FFmpeg..."
+          sudo apt update
+          sudo apt install -y ffmpeg
+          ffmpeg -version
+
+      - name: Download Video File
+        run: |
+          echo "جاري تحميل فيديو الفاتحة..."
+          curl -L "https://github.com/mo7ammedreyad1/Islam-agent/releases/download/fatihah-complete-v1/quran_fatihah_live_broadcast.mp4" -o stream_video.mp4
+          ls -lh stream_video.mp4
+
+      - name: Inspect Video Details with ffprobe
+        run: |
+          echo "=== فحص بيانات الفيديو والتشفير ==="
+          ffprobe -v error -show_format -show_streams stream_video.mp4
+
+      - name: Start Streaming to Instagram
+        env:
+          STREAM_KEY: ${{ secrets.INSTAGRAM_STREAM_KEY }}
+        run: |
+          echo "بدء إرسال البث المباشر إلى إنستغرام عبر RTMPS..."
+          ffmpeg -re -i stream_video.mp4 \
+            -c:v copy -c:a copy \
+            -f flv "rtmps://edgetee-upload-hbe1-2.xx.fbcdn.net:443/rtmp/$STREAM_KEY"
+          echo "تم الانتهاء من البث بنجاح."
